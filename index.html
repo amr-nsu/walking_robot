@@ -1,0 +1,83 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="lib/main.js"></script>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+     const ip='http://192.168.11.7:8000';
+   
+   function request(cmd, elem="Status") {
+    
+        const req = new XMLHttpRequest();
+        req.open('GET', ip+'/cmd='+cmd, true);
+        req.onload = function() {
+            if (req.status == 200) {
+                //response_callback(req.responseText, elem);
+            }
+        }
+        req.send(null);
+}
+  </script>
+  
+  <script>
+  $( function() {
+    $( "#tabs" ).tabs();
+  } );
+  </script>
+  
+  <script>
+  $( function() 
+  {
+    for (i=1;i<=6;i++)
+    $( "#slider-" + i).slider(
+    {
+    
+        change: function( event, ui ) 
+        {
+	        request(ui.value);
+	        
+        },
+        min: 0,
+        max:180,
+        orientation: 'vertical',
+        animate: 'normal'
+        
+    
+    });
+   });
+   
+
+
+  </script>
+</head>
+<body>
+
+    <div id="tabs">
+  <ul>
+    <li><a href="#tabs-1">Manual control</a></li>
+    <li><a href="#tabs-2">Auto-control</a></li>
+    <li><a href="#tabs-3">Description</a></li>
+  </ul>
+  <div id="tabs-1">
+  <table>
+    <td width='100'> <div id="slider-1"></div></td>
+    <td width='100'><div id="slider-2"></div></td>
+    <td width='100'><div id="slider-3"></div></td>
+    <td width='100'><div id="slider-4"></div></td>
+    <td width='100'><div id="slider-5"></div></td>
+    <td width='100'><div id="slider-6"></div></td>
+  </table>
+  </div>
+  <div id="tabs-2">
+
+  </div>
+  <div id="tabs-3">
+
+  </div>
+</div>
+
+</body>
+</html>
