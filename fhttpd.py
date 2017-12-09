@@ -5,7 +5,7 @@ from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 
 from lib.fserial import SerialDevice
 
-DEVICE = '/dev/ttyACM0'
+DEVICE = '/dev/ttyUSB1'
 BAUD = 9600
 
 class HttpHandler(BaseHTTPRequestHandler):
@@ -35,7 +35,7 @@ class HttpHandler(BaseHTTPRequestHandler):
            
            n = int(q[0][2:])
            a = int(q[1][2:])
-        
+
            HttpHandler.device.send_request(n, a)
 
 if __name__ == '__main__':   
