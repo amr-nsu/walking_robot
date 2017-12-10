@@ -2,4 +2,4 @@
 
 cd ${0%/*}
 
-python fhttpd.py
+python fhttpd.py #> /tmp/fhttpd.log

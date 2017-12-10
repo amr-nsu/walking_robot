@@ -7,12 +7,13 @@
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script>
-     const ip='http://192.168.11.7:8000';
+     const ip='http://192.168.11.18:8000';
    
-   function request(cmd, elem="Status") {
+   function request(i, a) {
     
         const req = new XMLHttpRequest();
-        req.open('GET', ip+'/cmd='+cmd, true);
+        const request = ip+'/cmd=go&n=' + i + '&a=' + a;
+        req.open('GET', request, true);
         req.onload = function() {
             if (req.status == 200) {
                 //response_callback(req.responseText, elem);
@@ -31,14 +32,90 @@
   <script>
   $( function() 
   {
-    for (i=1;i<=6;i++)
+  let i = 1;
+  
+      $( "#slider-1").slider(
+      {
+        change: function( event, ui ) 
+        {    
+	        request(1, ui.value);    
+        },
+        min: 0,
+        max:180,
+        orientation: 'vertical',
+        animate: 'normal'
+    });
+    
+    $( "#slider-2").slider(
+      {
+        change: function( event, ui ) 
+        {    
+	        request(2, ui.value);    
+        },
+        min: 0,
+        max:180,
+        orientation: 'vertical',
+        animate: 'normal'
+    });
+    
+    $( "#slider-3").slider(
+      {
+        change: function( event, ui ) 
+        {    
+	        request(3, ui.value);    
+        },
+        min: 0,
+        max:180,
+        orientation: 'vertical',
+        animate: 'normal'
+    });
+    
+    $( "#slider-4").slider(
+      {
+        change: function( event, ui ) 
+        {    
+	        request(4, ui.value);    
+        },
+        min: 0,
+        max:180,
+        orientation: 'vertical',
+        animate: 'normal'
+    });
+    
+    $( "#slider-5").slider(
+      {
+        change: function( event, ui ) 
+        {    
+	        request(5, ui.value);    
+        },
+        min: 0,
+        max:180,
+        orientation: 'vertical',
+        animate: 'normal'
+    });
+    
+    $( "#slider-6").slider(
+      {
+        change: function( event, ui ) 
+        {    
+	        request(6, ui.value);    
+        },
+        min: 0,
+        max:180,
+        orientation: 'vertical',
+        animate: 'normal'
+    });
+  
+  
+  
+    /*for (i=2;i<=6;i++){
     $( "#slider-" + i).slider(
     {
     
         change: function( event, ui ) 
-        {
-	        request(ui.value);
-	        
+        {   
+            alert(event.data);
+	        request(i, ui.value); 
         },
         min: 0,
         max:180,
@@ -47,9 +124,9 @@
         
     
     });
-   });
+   }*/
    
-
+});
 
   </script>
 </head>
