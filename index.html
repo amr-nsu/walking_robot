@@ -8,10 +8,34 @@
   <script>
      const ip='http://localhost:8000';
    
+   let status = "go";
+   /*
+   const m1=[0,  0,   0,   0,   0,  -25, -25, 0, 0, -15, -15, 0,  0,  0 ]; 
+   const m2=[0,  0,   0,  -40, -40, -40,  0,  0, 20, 20,  20, 20, 20, 20];
+   const m3=[0,  0,   0,  -50, -50, -50,  0,  0, 0,  0,   0,  0,  0,  0 ];
+   const m4=[0,  0,   15,  15,  0,   0,   0,  0, 0,  0,   0,  0,  25, 25];
+   const m5=[0, -20, -20, -20, -20, -20, -20, 0, 0,  0,   40, 40, 40, 0];
+   const m6=[0,  0,   0,   0,   0,   0,   0,  0, 0,  0,   50, 50, 50, 0];
+   */
+   const m1=[0,  0,   0,   0,   0,  -25, -25]; 
+   const m2=[0,  0,   0,  -40, -40, -40,  0];
+   const m3=[0,  0,   0,  -50, -50, -50,  0];
+   const m4=[0,  0,   15,  15,  0,   0,   0];
+   const m5=[0, -20, -20, -20, -20, -20, -20];
+   const m6=[0,  0,   0,   0,   0,   0,   0];
+   
+   const b1=[0,  0,   0,   0,   0,  -25, -25]; 
+   const b2=[0,  0,   0,   40,  40,  40,  0];
+   const b3=[0,  0,   0,   50,  50,  50,  0];
+   const b4=[0,  0,   15,  15,  0,   0,   0];
+   const b5=[0,  20,  20,  20,  20,  20,  20];
+   const b6=[0,  0,   0,   0,   0,   0,   0];
+
    function request(i, a) {
-    
+        const init = 90;
         const req = new XMLHttpRequest();
-        const request = ip+'/cmd=go&n=' + i + '&a=' + a;
+        const request = ip+'/cmd=go&n=' + i + '&a=' + (init + a);
+        
         req.open('GET', request, true);
         req.onload = function() {
             if (req.status == 200) {
@@ -20,27 +44,90 @@
         }
         req.send(null);
 }
+    function reverence(){
+        start();
+        
+        request(2,20);
+        request(5,-20);
+        setTimeout(start,1000);
+    }
+    
+    function start(){
+        request(1,0);
+        request(2,0);
+        request(3,0);
+        request(4,0);
+        request(5,0);
+        request(6,0);
+    }
+    
+
+    function stop(){
+        status = "stop";
+    }
+
+    function forward(){
+        status = "go";
+        go();
+    }
+    
+    function backward(){
+        status = "back";
+        back();
+    }
+
+    
+    var i = 0;
+    function go(){
+        request(1, m1[i]);
+        request(2, m2[i]);
+        request(3, m3[i]);
+        request(4, m4[i]);
+        request(5, m5[i]);
+        request(6, m6[i]);
+        ++i;
+        if (i >= m1.length) i = 0;
+        if (status != "stop") 
+            setTimeout(go,400);
+        else
+            start();
+        
+    }
+   
+    function back(){
+        request(1, b1[i]);
+        request(2, b2[i]);
+        request(3, b3[i]);
+        request(4, b4[i]);
+        request(5, b5[i]);
+        request(6, b6[i]);
+        ++i;
+        if (i >= b1.length) i = 0;
+        if (status != "stop") 
+            setTimeout(back,400);
+        else
+            start();
+    }
+    
   </script>
-  
   <script>
   $( function() {
     $( "#tabs" ).tabs();
   } );
   </script>
-  
   <script>
   $( function() 
   {
   let i = 1;
   
       $( "#slider-1").slider(
-      {
+      { 
         change: function( event, ui ) 
         {    
 	        request(1, ui.value);    
         },
-        min: 0,
-        max:180,
+        min:-90,
+        max:90,
         orientation: 'vertical',
         animate: 'normal'
     });
@@ -51,8 +138,8 @@
         {    
 	        request(2, ui.value);    
         },
-        min: 0,
-        max:180,
+        min:-90,
+        max:90,
         orientation: 'vertical',
         animate: 'normal'
     });
@@ -63,20 +150,19 @@
         {    
 	        request(3, ui.value);    
         },
-        min: 0,
-        max:180,
+        min:-90,
+        max:90,
         orientation: 'vertical',
         animate: 'normal'
     });
-    
     $( "#slider-4").slider(
       {
         change: function( event, ui ) 
         {    
 	        request(4, ui.value);    
         },
-        min: 0,
-        max:180,
+        min:-90,
+        max:90,
         orientation: 'vertical',
         animate: 'normal'
     });
@@ -87,8 +173,8 @@
         {    
 	        request(5, ui.value);    
         },
-        min: 0,
-        max:180,
+        min:-90,
+        max:90,
         orientation: 'vertical',
         animate: 'normal'
     });
@@ -99,8 +185,8 @@
         {    
 	        request(6, ui.value);    
         },
-        min: 0,
-        max:180,
+        min:-90,
+        max:90,
         orientation: 'vertical',
         animate: 'normal'
     });
@@ -126,11 +212,9 @@
    }*/
    
 });
-
   </script>
 </head>
 <body>
-
     <div id="tabs">
   <ul>
     <li><a href="#tabs-1">Manual control</a></li>
@@ -138,22 +222,67 @@
     <li><a href="#tabs-3">Description</a></li>
   </ul>
   <div id="tabs-1">
-  <table>
-    <td width='100'> <div id="slider-1"></div></td>
-    <td width='100'><div id="slider-2"></div></td>
-    <td width='100'><div id="slider-3"></div></td>
-    <td width='100'><div id="slider-4"></div></td>
-    <td width='100'><div id="slider-5"></div></td>
-    <td width='100'><div id="slider-6"></div></td>
+  
+  <table border=1 height="70%" width="100%">
+    <tr height="50%">
+    <td>
+    
+    <table width="100%" height="100%">
+    <tr height="10%">
+    <td></td>
+    <td align="center"><font size="+10">Left leg</font></td>
+    <td></td>
+    </tr>
+    <tr>
+    <td align="center"><font size="+3">Foot</font></td>
+    <td align="center"><font size="+3">Knee</font></td>
+    <td align="center"><font size="+3">Hip</font></td>
+    </tr>
+    
+    <tr height="40%">
+    <td width='100'align="center"> <div id="slider-1"></div></td>
+    <td width='100'align="center"><div id="slider-2"></div></td>
+    <td width='100'align="center"><div id="slider-3"></div></td>
+    </tr>
+    </table>
+    </td>
+    
+    <td>
+    
+    <table width="100%" height="100%">
+    <tr height="10%">
+    <td></td>
+    <td align="center"><font size="+10">Right leg</font></td>
+    <td></td>
+    </tr>
+    <tr>
+    <td align="center"><font size="+3">Foot</font></td>
+    <td align="center"><font size="+3">Knee</font></td>
+    <td align="center"><font size="+3">Hip</font></td>
+    </tr>
+    <tr height="40%">
+    <td width='100' align="center"><div id="slider-4"></div></td>
+    <td width='100' align="center"><div id="slider-5"></div></td>
+    <td width='100' align="center"><div id="slider-6"></div></td>
+    </tr>
+    </table>
+    </td>
+    </tr>
+    
+    <table height="10%" width="100%">
+    <tr>
+    <td align="center"><input type="button" value="Start position" onclick=start() ></input></td>
+    <td><input type="button" value="Reverence" onclick=reverence() ><div id="reverence"></input></td>
+    </tr>
   </table>
   </div>
+  
   <div id="tabs-2">
-
+        <object id="control" data="ui.svg" type="image/svg+xml" height="90%" width="100%"></object>
   </div>
   <div id="tabs-3">
 
   </div>
 </div>
-
 </body>
 </html>

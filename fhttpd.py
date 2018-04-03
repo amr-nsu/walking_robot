@@ -1,12 +1,11 @@
-import math
-import time
 from os import curdir, sep
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 
-from lib.fserial import SerialDevice
+from fserial import SerialDevice
 
-DEVICE = '/dev/ttyUSB1'
+DEVICE = '/dev/ttyUSB0'
 BAUD = 9600
+
 
 class HttpHandler(BaseHTTPRequestHandler):
 
@@ -18,7 +17,7 @@ class HttpHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.get_file()
         self.get_cmd()
- 
+
     def get_file(self):
         if self.path.endswith(".html") or self.path.endswith(".js") or self.path.endswith(".svg") or self.path.endswith(".css"):
             try:
@@ -30,16 +29,16 @@ class HttpHandler(BaseHTTPRequestHandler):
 
     def get_cmd(self):
         if self.path.startswith('/cmd=go'):
-           r = self.path[8:]
-           q = r.split('&')
-           
-           n = int(q[0][2:])
-           a = int(q[1][2:])
+            r = self.path[8:]
+            q = r.split('&')
 
-           HttpHandler.device.send_request(n, a)
+            n = int(q[0][2:])
+            a = int(q[1][2:])
+            print n, a
+            HttpHandler.device.send_request(n, a)
 
-if __name__ == '__main__':   
+
+if __name__ == '__main__':
     print('fhttpd started ...')
     server = HTTPServer(('', 8000), HttpHandler)
     server.serve_forever()
-    
