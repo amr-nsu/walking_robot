@@ -1,15 +1,15 @@
+import math
+import time
 from os import curdir, sep
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 
-from fserial import SerialDevice
-
-DEVICE = '/dev/ttyUSB0'
-BAUD = 9600
+import rospy
+from std_msgs.msg import String
 
 
 class HttpHandler(BaseHTTPRequestHandler):
 
-    device = SerialDevice(DEVICE, BAUD)
+    publ = rospy.Publisher("/robot/motor", String, queue_size=1)
 
     def do_GET(self):
         self.send_response(200)
@@ -17,9 +17,9 @@ class HttpHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.get_file()
         self.get_cmd()
-
+ 
     def get_file(self):
-        if self.path.endswith(".html") or self.path.endswith(".js") or self.path.endswith(".svg") or self.path.endswith(".css"):
+        if self.path.endswith(".html") or self.path.endswith(".js") or self.path.endswith(".svg") or self.path.endswith(".css") or self.path.endswith(".png"):
             try:
                 f = open(curdir + sep + self.path)
                 self.wfile.write(f.read())
@@ -29,16 +29,12 @@ class HttpHandler(BaseHTTPRequestHandler):
 
     def get_cmd(self):
         if self.path.startswith('/cmd=go'):
-            r = self.path[8:]
-            q = r.split('&')
-
-            n = int(q[0][2:])
-            a = int(q[1][2:])
-            print n, a
-            HttpHandler.device.send_request(n, a)
+           HttpHandler.publ.publish(self.path[8:])
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':   
     print('fhttpd started ...')
+    rospy.init_node('control')
     server = HTTPServer(('', 8000), HttpHandler)
     server.serve_forever()
+    
