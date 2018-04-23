@@ -1,5 +1,3 @@
-import math
-import time
 from os import curdir, sep
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 
@@ -17,7 +15,7 @@ class HttpHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.get_file()
         self.get_cmd()
- 
+
     def get_file(self):
         if self.path.endswith(".html") or self.path.endswith(".js") or self.path.endswith(".svg") or self.path.endswith(".css") or self.path.endswith(".png"):
             try:
@@ -29,12 +27,20 @@ class HttpHandler(BaseHTTPRequestHandler):
 
     def get_cmd(self):
         if self.path.startswith('/cmd=go'):
-           HttpHandler.publ.publish(self.path[8:])
+            HttpHandler.publ.publish(self.path[8:])
 
 
-if __name__ == '__main__':   
-    print('fhttpd started ...')
+if __name__ == '__main__':
+    import signal
+    import sys
+
+    def exit(signal, frame):
+        print('fhttpd stoped')
+        sys.exit(0)
+
+    signal.signal(signal.SIGINT, exit)
+
+    print('fhttpd started')
     rospy.init_node('control')
     server = HTTPServer(('', 8000), HttpHandler)
     server.serve_forever()
-    
