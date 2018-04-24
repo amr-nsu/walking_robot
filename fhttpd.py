@@ -7,11 +7,11 @@ from std_msgs.msg import String
 
 class HttpHandler(BaseHTTPRequestHandler):
 
-    publ = rospy.Publisher("/robot/motor", String, queue_size=1)
+    motor_pub = rospy.Publisher("/robot/motor", String, queue_size=1)
 
     def do_GET(self):
         self.send_response(200)
-#        self.send_header('Content-type','text/html')
+        # self.send_header('Content-type','text/html')
         self.end_headers()
         self.get_file()
         self.get_cmd()
@@ -27,7 +27,7 @@ class HttpHandler(BaseHTTPRequestHandler):
 
     def get_cmd(self):
         if self.path.startswith('/cmd=go'):
-            HttpHandler.publ.publish(self.path[8:])
+            HttpHandler.motor_pub.publish(self.path[8:])
 
 
 if __name__ == '__main__':
