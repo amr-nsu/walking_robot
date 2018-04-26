@@ -35,7 +35,7 @@ if __name__ == '__main__':
     import sys
 
     def exit(signal, frame):
-        print('fhttpd stoped')
+        print('fhttpd stopped')
         sys.exit(0)
 
     signal.signal(signal.SIGINT, exit)
